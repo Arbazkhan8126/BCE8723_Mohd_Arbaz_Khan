@@ -1,0 +1,70 @@
+use vitcampus;
+
+create table category( cid int primary key, cname varchar(100) not null);
+
+insert into category values (101,'elecronics'),(102,'Home appliances');
+
+select * from category;
+
+CREATE TABLE products( pid int primary key, pname varchar(100) NOT NULL,
+                       cid int,
+                       FOREIGN KEY (cid) REFERENCES category(cid) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+desc products;
+
+insert into products values (501,'HP laptop',101);
+insert into products values (503,'Power Bank',101);
+
+delete from category where cid=101;
+
+select * from category;
+
+select * from products;
+
+UPDATE category SET cid=201 WHERE cid=101;
+
+select * from worker;
+
+Select Frist_name, department, salary from worker where department='admin' order by salary desc;
+
+select count(worker_id) from worker where department='admin' or department='HR';
+
+select department, count(department) from worker group by department order by department asc;
+
+select department, count(department) from worker group by department having count(department)>=3 order by department asc;
+
+select * from worker limit 4 offset 3;
+
+create table toppers(id int);
+insert into toppers values (5);
+
+select first_name, department from worker where worker_id in (select id from toppers);
+
+select *
+from worker
+WHERE department = 'Admin'
+ORDER BY salary ASC
+LIMIT 2;
+
+select *
+FROM worker
+WHERE department = 'Admin'
+  AND salary = (
+      select DISTINCT salary
+      FROM worker
+      WHERE department = 'Admin'
+      ORDER BY salary DESC
+      LIMIT 1 OFFSET 1
+  );
+
+
+select *
+FROM worker w1
+WHERE salary = (
+    select DISTINCT salary
+    FROM worker w2
+    WHERE w2.department = w1.department
+    ORDER BY salary DESC
+    LIMIT 1 OFFSET 1
+);
